@@ -1,0 +1,16 @@
+#	Helpfull Links 
+##	Foreshadowed by coursera
+========================================================================
+|
+|
+|
+|
+|
+|
+|
+|
+### for loops and truthy falsy statements
+1) comparison operators 	link => https://www.javascripttutorial.net/javascript-comparison-operators/
+2) truthy 			link => https://developer.mozilla.org/en-US/docs/Glossary/Truthy
+3) falsy			link => https://developer.mozilla.org/en-US/docs/Glossary/Falsy
+4) conditional	statements	link => https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/conditionals

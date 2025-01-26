@@ -1,0 +1,184 @@
+
+
+	Command			Used for
+
+			
+
+	<cd>	========Change Directory
+
+	<ls>	========List command used for showing the content of a directory.
+		<-la>	list all directories
+
+	<rm>	========Remove command used for removing a file or a directory
+
+	<mv>	========Used to move files or folders to another location
+
+	<touch> ========Allows creating of a new empty file or to update a timestamp on a file
+
+	<cp>	========Used to make a copy of a file or folder
+
+	<mkdir>	========Make a new directory
+
+	<pwd>	========Print work directory, shows the current location in the shell
+
+	<cat>	========Allows reading or concatenation of a file
+
+	<less>	========Displays the contents of a file one page at a time.
+
+	<grep>	========Global regular expression, allows for searching contents of files or folders. CASE SENSITIVE
+			when lower case filter is used it searched for term WITHIN location... partial match		
+		<-w>	exact match
+		<-i>	ignore case sensitivity
+	
+	<wc>	========Word count command		|
+		<-w>	an additional flag telling <wc> to return the word count
+
+	< | >	========Pipe... used to combine the output of one command as the input to another command 
+
+
+		========================================================
+
+				Git commands
+
+		========================================================
+
+<git init>		creates a new repo 
+
+<git remote>		initialize a local repo ,.... only locally available
+
+<git status>		displays WHICH files changed ... displays branch ... good practice to check before working
+
+<git add>		prompt for git to track modified file in a staged area.... these files are included on commits... located only on local machine
+
+<git restore --stage>	prompt for git to untrack modified file... not included on commits
+
+<git commit>		saves the file and keep a snapshot of changes... basically creates a save point to reload from
+		<-m>	adds a message to the commit for others
+
+<git branch>		creates a new branch 		**** need to merge branch... main branch has knowledge
+
+<git checkout>		creates a new branch... moves dir to the new branch 
+		<-B>	create/reset and checkout a branch
+
+<git push>		pushes changes to the repo... public view		***git push origin <branch name to go to>   dont forget the ORIGIN
+		<-u>	only get updates from the upstream.... main branch
+
+<git clone>		copy the branch to local system. use clone for the first time
+
+<git pull>		update the branch changes to local system... 
+
+<git log>		view a detail summary of the log file.... shows detail of the change
+		<--merge>	view the detals from what was merged
+		<-p> 	view commit changes for specified id. <git log -p (hash id)>
+
+<git diff>		shows WHAT changes are made
+
+<git blame>		view recent activity per file... shows point of the change
+		<-l>    shows long version hash dash id
+		<-L (starting line),(stopping line) (file path)>   <<---------- shows filter/line
+
+
+=============================================================================================================================
+			GREP 	EXAMPLE
+----------------------------------------------------------------------------------------------------------
+
+# grep <flags> <filtering term> <file location>   ----proper format
+
+
+
+# ls /bin | grep zip	 		---- the | (pipe) combines functionality of searching (ls) the bin and filtering (grep)
+						i guess its just to keep your screen from becoming clutterd too quickly
+						further test needed to see if the (grep) is used for files... and this is the work around for directories!!
+
+
+========================================================================================================================================
+
+		REDIRECTION
+
+INPUT 	======== 0 shell standard reference	<
+
+OUTPUT	======== 1 shell standard reference	>
+
+ERROR	======== 2 shell standard reference	2>
+
+		&1 combine INPUT 		2>&1
+--------------------------------------------------------------
+
+
+	< input.text > output.text 2> error.txt
+
+=========================================================================================
+		INPUT / OUTPUT 
+========================================================================================
+
+take info using cat command and store into file.
+-----------------------------------------------------
+
+# cat > input.txt
+This is me adding some text from the keyboard!<enter>	------this is putting info into a new file 
+<ctrl D> -- tells that cat command -end of file-
+
+#cat < input.txt
+This is me adding some text from the keyboard!	<this time it generated output>
+
+==================================================================================
+		FUNCTIONALITY
+==============================================================================
+
+send output to a text file
+-------------------------------------
+
+
+# ls 						<--- SHOWS CONTENT BEFORE OUTPUT
+archive	   projects
+
+# ls -l > output.txt			<---- THE > FORCES THE RESULT OF THE COMMAND INTO A FILE CALLED OUTPUT.TXT
+
+# ls						<--- SHOWS CONTECT AFTER OUTPUT CREATION
+archive	  output.txt	project
+
+# less output.txt			<---- THE less COMMAND DISPLAYS CONTENT ONE PAGE AT A TIME
+
+  ----new page pops up----
+
+total 8
+drwxr-xt-x 3 root root 4096 Feb 22 15:35 archive
+-rw-r--r-- 1 root root 	  0 Feb 22 15:45 output.txt
+drwxr-xr-x 4 root root 4096 Feb 22 15:40 projects
+output.txt (END)
+
+
+=============================================================================================
+			ERROR HANDLING
+=============================================================================================
+
+
+error may happen when output to text file... error will change to error string <2>
+
+------------------------------------------------------------
+
+# ls -l /bin/usr > error.text							<-- non existant dir used. error happend so print to console
+ls: cannot access `/bin/usr`: No such file or directory
+
+# ls -l /bin/usr 2> error.text							<-- 2> specified error to be caught... so didnt print to console
+
+# less error.txt 
+	------ new page pops up -------
+
+ls: cannot access `/bin/usr`: No such file or directory
+error.txt (END)
+
+	-------------------------------
+# ls -l /bin/usr > error_output.txt 2>&1					<-- handles both cases: found data and didnt find data/ERROR	
+                       									&1 gets the data that is available
+# less error_output.txt
+	-------new page pops up--------
+
+ls; cannot access `/bin/usr`: No such file or directory
+error_output.txt (END)
+	-------------------------------
+
+
+
+
+

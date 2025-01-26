@@ -1,0 +1,139 @@
+#			JEST
+|
+|
+|
+|=========================================================================
+Used to test software prior to release/publishing. the jest file is a seperate file
+
+found within the root directory of the project given. this is where you 
+
+will write all the arugments for testing.
+
+
+in the console frame of VS code type...
+
+	node --version
+
+test for version of node installed.
+
+	npm --version
+
+test for version of npm installed.
+
+	jest --version
+
+test for version of jest installed.
+
+---------------------------------------------------------------------------
+
+
+must make the root dir folder for dependancies within the project.
+
+	npm init -y
+
+-y automatically answers yes to all the question of installation.
+
+creates a package.json file. helps keep track of dependacies for project.		 
+
+	npm install --save-dev jest							<<<<<<<<<<<<<<======== this is what youre looking for stupid ==============
+
+
+
+
+====================================================================================
+
+
+MAKE SURE THE DIRECTORY IS SET UP TO THE CURRENT PROJECT FOLDER!!!
+
+
+====================================================================================
+
+
+node_modules is created.... where all modules are stored.
+
+must update the scripts.test in the package.json file. this directs the file 
+
+to use jest for testing purposes....
+ 
+=======================================================================================
+|
+|{
+|	"name": "writing-test-with-jest',
+|	"version": "1.0.0",
+|	"description": "",
+|	"main": "<root file location>", 
+|	|> Debug
+|===>	"scripts": {
+|		"test": "jest",     <====== must be added manually. this is what tells the app to use for testing
+|	},
+|	"keywords": [],
+|	"author": "",
+|	"license": "ISEC",
+|	"devDependencies": {
+|		"jest": "^28.1.0"  <===== added automatically from the install command..... the dev dependencies
+|	},
+|}	
+=========================================================================================
+
+
+to run the test for the file you must run the command....
+
+	npm test
+
+the jest file is named in a .test.js convention within the root directory
+
+	<root file location>.test.js
+
+YOU MUST IMPORT FUNCTIONS INTO THE FILE FOR TESTING!!!!!
+-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^
+
+	const <function name> = require('./<root folder>')     <<-------- the .js is omitted because node.js understands what you mean... even when you dont use it
+
+
+YOU MUST ALSO EXPORT THE FUNCTIONS FROM ROOT FOLDER ALSO!!!!
+
+	module.exports = <function name>
+
+
+
+
+
+
+
+				SOME BASIC COMMANDS 
+
+==============================================================================================
+
+			test(A, () =>{})
+
+the first argument is the test shown for the test upon initiation..... 
+	~~returns the number plus 5  <passed> or <failed>
+
+the function hold the parameters for the test 
+-----------------------------------------------------------------------------------------------------------------
+
+			expect ()
+
+this function is the parameter for which the test runs. it takes a single argument.... the imported function
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+			toBe()
+
+this function is the parameter for which the test answer should be. it take a single parameter..... the result
+	
+
+
+
+
+
+
+	EXAMPLE TEST LINE
+=================================================================================================
+
+		test('returns the number plus 5', () => {
+			expect(addFive(1)).toBe(6);
+		})
+
