@@ -21,14 +21,24 @@
 
 
 
-	attribute selectors
-		[attr=value]{}
-		[attr~=value]{}
-		[attr$=value]{}
-		[attr*=value]{}
+		attribute selectors
+	      -------------------------
 
-	AMONG OTHERS	
+	  Selector		Syntax				Example
 
+	[attribute]		[href] {}		Selects all elements with a href attribute
+
+	[attribute=value]	[lang="fr"] {}		Selects all elements with lang attribute that has a value of "fr"
+
+	[attribute~=value]	[input~=hello] {}	Elements with input attribute containing the whitespace separated substring "hello"
+
+	[attribute|=value]	[lang|=en] {}		Elements with lang attribute value equal to "en" or "en-"(en hyphen)
+
+	[attribute^=value]	a[href^="https"] {}	Every <a> element with href attribute value begins with "https"
+
+	[attribute$=value]	a[href$=".docx"] {}	Every <a> element with href attribute value ends with ".docx"
+
+	[attribute*=value]	a[href*="meta"] {}	Every <a> element with href attribute value has substring "meta"
 
 
 
@@ -61,13 +71,33 @@ h1, p {
 
 	descendant slectors (using space)	
 		used to select elements contained within another selector 
+
 			#blog h1 {color: blue;}     <------ all h1 elements within the #blog will be blue
 
-	child selector ( > )
+----------------------------------------------------------------------------------------------------------------------------
 
-	general siblin selectors ( ~ )
+	child selector ( > )
+		used to select the imidiate child element
+
+			#blog > h1 {color: blue;}
+
+------------------------------------------------------------------------------------------------------------------------------
+
+	general sibling selectors ( ~ )
+		apply rules to all element types that follow the element type,
+		doesn't have to be imidiately after parent
+			
+			h1 ~ p {color: blue;}
+
+------------------------------------------------------------------------------------------------------------------------------
 
 	adjacent sibling selectors ( + )
+		target the first element type following the target element
+		only if target is imidiately after parent 
+
+			div + p {color: blue;}
+
+
 
 
 
@@ -132,28 +162,181 @@ Next in the hierarchy are IDs and by now you know that they are represented by �
 
 
 
-		Classes, attributes, and pseudo-classes
-	    -------------------------------------------------
+			 pseudo-classes
+	  	   -------------------------
 
-Classes, and the attributes inside the selectors, come next with what is 
-called the pseudo-classes that you will soon learn more about. 
+State based selectors. Used to improve the interactivity, like user input.
 
-For example:
+The order in which you document pseudo-classes will determine which style will be displayed.
+Always follow the LVHA:
 
-	.my-class 
-
-	p[“attribute”]
-
-	div:hover
+	LINK:	    VISITED:	 HOVER:		ACTIVE:
 
 
 
-			Elements and pseudo-elements
-		--------------------------------------------
+	selector :pseudo-class {property: value;}
 
-Finally, elements and something you call pseudo-elements have the lowest 
-position in the specificity hierarchy. You will learn more about 
-pseudo-elements later in this lesson.
+	
+		user action state
+	     -------------------------
+
+
+		:hover  --------- changes the state of element while curser hovers over it
+
+		:active   ------- changes the state while user actively press and hold 
+
+		:focus   -------- focus styleing on the element it targets
+
+		:fullscreen   --- the element in full-screen mode
+
+		
+
+
+			Form State
+		-------------------------
+
+target the different state that elements can have. generally come in pairs
+
+	
+
+	:checked and :indeterminate
+		generally used for check boxes
+
+	:valid and :invalid
+		used in fields like emails and phone numbers
+
+	:default
+		all default <input> elements.... input:default{}
+
+	:disabled
+		all disabled <input> elements... input:disabled{}
+
+	:enabled	
+		all enabled <input> elements.... input:enabled{}
+
+	:optional
+		elements with no "required" attribute
+	
+	:required
+		elements with the 'required' attribute
+
+
+
+
+			Web Link State
+		----------------------------
+
+Style links on web pages. Typically to change the color of links alread opened.
+
+
+
+	:link
+		changes the link element before visited
+			a:link{color: blue;}
+			
+	:visited
+		changes the link element after visiting
+			a:visited{color: purple;}
+
+
+
+
+
+			Specific position based state
+		---------------------------------------------
+
+
+Allow to target specific items.... like a specific list item amongst list items
+
+
+	:first-child
+		<p> elements who are the first child of it's parent element
+			p:first-child{}
+
+	:last-child
+		<p> elements who are the last child of it's parent element
+			p:last-child{}
+
+	:only-child
+		elements which are only child of a parent element
+			p:only-child{}
+
+	:nth-last-child()
+		targets the <div> element which are the 3rd child of a parent, counting
+		from the last position first
+			div:nth-last-child(3)
+
+	:nth-child()
+		target the nth child of taget elements
+			div:nth-child(3){}			
+
+	:first-of-type
+		target the first item of it's type, while the remaining items won't be affected
+			li:first-of-type {color: lightseagreen}3
+	:last-of-type
+		target the last item of it's type
+			p:last-of-type{}
+		
+	:nth-last-of-type()
+		target the 2 last item of it's type, while the remaining items wont be affected
+			p:last-of-type(2){}
+	:nth-of-type()
+		the nth sibling of a parent element
+			p:nth-of-type(2){}
+
+	:only-of-type
+		targets the element that only THAT element inside it's parent
+			p:only-of-type{}
+
+	
+
+
+
+			pseudo-element selectors
+		  ------------------------------------
+
+
+	:root
+		select the root element of the document
+			:root{}
+	
+	::first-letter
+		alter the first letter of each element
+			li::first-letter{color: coral;}
+
+	::first-line
+		alter the complete first line of each target element
+			li::first-line{color: lightseagreen;}
+
+	::selection
+		alter specific text within target element. Useful when taking notes.
+		typically see inverted colors from white-black to black-white
+			li::selection{color: brown; background-color: antiquewhite;} 
+	
+	::marker
+		used to add style element to a list... bullet points
+			li::marker{content: '<>'; color: cornflowerblue;}
+
+	::placeholder
+		selects input elements with "placeholder" attribute specified
+			input::placeholder{}
+
+	:before 
+		allow to add content before an element 
+			#tips::before{background: darkkhaki; content: "Tips";}
+
+	::after
+		add content after an element
+			#tips::after{background: darkkhaki; content: "!!";}
+
+	:empty
+		target element with no children
+			div:empty{}
+
+	:not()
+		elements that are not of the target type
+		:not(div){}
+	
 
 
 
@@ -186,6 +369,19 @@ highest specificity.
 
 Let’s explore a couple of examples for clarity. Take note that the properties and 
 values are not included in these examples to keep the focus on the selectors only. 
+
+
+
+
+	element	=>	0 0 0 1 => score: 1
+
+	.class	=>	0 0 1 0 => score 10
+
+	#ID	=>	0 1 0 0 => score 100
+
+
+
+
 
 
 Example 1
