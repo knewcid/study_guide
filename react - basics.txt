@@ -1,0 +1,209 @@
+
+
+
+
+					REACT
+
+
+
+===========================================================================================================
+
+Streamlines the use and build of components. Only a CLIENT SIDE library, will have to interact with other libraries. ROUTING AND SERVER CLIENT COMMS =REDUX!!
+REUSEABLE CODE!!!!!!! Single page application.
+
+
+
+COMPONENT   ----------   stand alone part of the UI. Combine into more complex unit to form the website.
+
+STATE   --------------   all the values of all the variables app is working with
+
+JavaScript Modules ---	 In JavaScript, a module is simply a file.
+
+
+
+
+
+
+					HOW TO
+				=====================
+
+		*****	      npm init react-app <file name>		*****
+
+This is the termal code for starting up a react application. Whenever you run the npm command to add other 
+people's code, that code, and all other Node modules that depend on it, get downloaded to your machine.
+However, although it's possible do to so, this is not really necessary, at least in the case of the Node module.... 
+
+			<create-react-app> Node module.
+
+In other words, you can avoid installing the <create-react-app> package but still use it.
+
+You can do that by running the following command: <npm init react-app example>, where “example” is the actual name of your app. 
+You can use any name you’d like, but it’s always good to have a name that is descriptive and short.
+
+
+	A long compiled list of shit prints to the screen....... key take aways:
+	---go to the newly made directory  --- cd <file name>
+	---start the react engine   ---------- npm start
+	---follow the directions for local hosting of the project
+
+
+
+
+
+			Module Exports
+		------------------------------
+
+While all the various syntactical differences are not listed, here are a few examples that will 
+cover all the ways that the importing and exporting of JavaScript modules will be done in this course.
+
+
+	Using default exports  -----  You can have one default export per JavaScript module.
+
+	Using named exports 
+
+
+
+
+		default exports
+	      ===================
+
+example:  two ways to perform a default export:
+
+========================================H
+	1)				H
+					H
+export default function addTwo(a, b) {	H
+    console.log(a + b);			H
+}					H
+					H
+========================================H
+
+So, in the above example, you’re adding the export 
+default keywords in front of the addTwo function declaration.
+
+================================H
+	2)			H
+				H
+function addTwo(a, b) {		H
+    console.log(a + b);		H
+}				H
+				H
+export default addTwo;		H
+				H
+================================H
+
+
+
+
+
+		Named Exports
+	    =====================
+
+Named exports are a way to export only certain parts of a given JavaScript file.
+In contrast with default exports, you can export as many items from any JavaScript file as you want.
+In other words, there can be only one default export, but as many named exports as you want.
+
+
+For example
+
+========================================H
+1)					H
+					H
+export function addTwo(a, b) {		H
+    console.log(a + b);			H
+}					H
+					H
+export function addThree(a, b, c) {	H
+    console.log(a + b + c);		H
+}					H
+					H
+========================================H
+
+
+================================H
+2)				H
+				H
+function addTwo(a, b) {		H	
+    console.log(a + b);		H
+}				H
+				H
+function addThree(a, b, c) {	H
+    console.log(a + b + c);	H
+}				H
+				H
+export { addTwo, addThree };	H
+				H
+================================H
+
+
+
+
+
+
+			Importing Modules
+		-------------------------------
+
+
+Just like when exporting modules in JavaScript, there are several ways to import them.
+The exact syntax depends on how the module was exported.
+
+
+
+You want to import the addTwo.js module into the mathOperations.js module.
+
+
+
+
+
+		Importing a Module that was Exported as Default
+		------------------------------------------------
+
+Consider the previous example of exporting the addTwo function as a default module:
+
+================================H
+1)	// addTwo.js module:	H
+				H
+function addTwo(a, b) {		H
+    console.log(a + b);		H
+}				H
+				H
+export default addTwo;		H
+				H
+================================H
+
+To import it into the mathOperations.js module, you could use the following syntax:
+
+========================================================H
+2)		// mathOperations.js module:		H
+							H <-- start this import with the IMPORT keyword
+import addTwo from "./addTwo";				H	<-- then the NAME under which you’ll use this 
+imported code						H		<-- FROM, and finally the LOCATION of the file							
+							H
+// the rest of the mathOperations.js code goes here	H
+							H
+========================================================H
+
+
+So, you could start this import with the import keyword, then the name under which you’ll use this 
+imported code inside the mathOperations.js file. You would then type the keyword from, and finally 
+the location of the file, without the .js extension.
+
+
+ 
+		 Importing a Module that was Exported as Named
+		------------------------------------------------
+
+Contrast the above import of the default addTwo export with the different import syntax 
+if the addTwo function was instead a NAMED export:
+
+========================================================H
+3)			// mathOperations.js module:	H
+							H
+import { addTwo } from "./addTwo";			H
+							H
+// the rest of the mathOperations.js code goes here	H
+							H
+========================================================H
+
+
+
