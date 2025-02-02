@@ -8,8 +8,14 @@
 
 ===========================================================================================================
 
-Streamlines the use and build of components. Only a CLIENT SIDE library, will have to interact with other libraries. ROUTING AND SERVER CLIENT COMMS =REDUX!!
-REUSEABLE CODE!!!!!!! Single page application.
+Streamlines the use and build of components. Only a CLIENT SIDE library, will have to interact with other libraries. 
+ROUTING AND SERVER CLIENT COMMS =REDUX!!  REUSEABLE CODE!!!!!!! Single page application.
+
+React uses a syntax known as JSX..... Java Script XML. also known as a syntax extension to JS.
+	JSX allows for JS code to be written inside HTML. This syntax is placed in the Return statement of a 
+	functional component.
+React treats capitalized names differently. Components MUST be capitalized.... ex:Heading.js
+	React will treat lower case components as HTML elements!!
 
 
 
@@ -17,7 +23,22 @@ COMPONENT   ----------   stand alone part of the UI. Combine into more complex u
 
 STATE   --------------   all the values of all the variables app is working with
 
-JavaScript Modules ---	 In JavaScript, a module is simply a file.
+Modules    -----------	 stand alone units of code that can be re-used.... simply a series of compenents
+
+export   -------------	 used to make a module available to another file
+
+import   -------------	used to declare that a module is NEEDED to function
+
+transpiling  ---------	interpreting a programming language and translating it to a specific target language
+
+className   ----------	is a sub for the class format in HTML.... class is a reserved word in JSX
+
+props ----------------	represents values passed as arguments as in functional programming.
+			used to pass data from object to object with properties object.....props
+
+JS object ------------	used to store data.... with named value: pairs. access properties with dot notation.
+
+pure functions  ------	always return the same ouput for the same argument values
 
 
 
@@ -28,6 +49,9 @@ JavaScript Modules ---	 In JavaScript, a module is simply a file.
 				=====================
 
 		*****	      npm init react-app <file name>		*****
+
+			npm init react-app . <--- this is valid also. The ( . ) instructs VScode to launch in the current folder
+
 
 This is the termal code for starting up a react application. Whenever you run the npm command to add other 
 people's code, that code, and all other Node modules that depend on it, get downloaded to your machine.
@@ -45,6 +69,107 @@ You can use any name you’d like, but it’s always good to have a name that is
 	---go to the newly made directory  --- cd <file name>
 	---start the react engine   ---------- npm start
 	---follow the directions for local hosting of the project
+	---src is the folder where the app files are stored
+
+
+
+
+
+
+					INDEX FILE <Root> -index.js
+					-------------------
+
+import React from 'react';			<-- imports the react library to use there special methods
+import ReactDOM from 'react-dom/client';		<-- import ReactDom from the .react-dom/client method of the react library
+									*i guess thats how the Virtual DOM is created*
+import App from '.App.js'			<-- import <App> from another source
+
+ReactDOM.createRoot(
+	document.querySelector('#root')
+).render(<App />)				<-- every app must conatin the root component <App>
+
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+
+
+					App.js
+				       --------
+
+function App() {
+	return (
+		<div className='App'>		   \		<-- className is used to indicate the html class type <div class ="App"></div>
+			<h1>Hello React.</h1>	    == JSX syntax... 
+		</div>				   /
+	);
+};
+
+
+export default App;
+
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+
+					App.js
+
+function Header() {
+	return <h1>Hello World</h1>;		<-- JSX element. Typically this function is it's own file exported/imported
+};
+
+function App() {
+	return <Header />;	<-- IMPORTANT TO STRUCTURE SYNTAX LIKE THIS!!!!
+};
+
+export default App;
+
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+
+
+
+
+
+				Tree Structure of Components
+			---------------------------------------------
+
+						REACT APP
+						    |
+					    <ROOT /> COMPONENT			<-- <ROOT /> is converted to a DOM fragment, then it is
+					   /        |          \			placed into the HTML as a child of a <div id="root"> element.
+                                    <HEADER />   <MAIN />     <SIDEBAR />
+
+
+
+
+
+
+						FOLDER STRUCTURE
+					   ------------------------
+
+NODE MODULE   --------	repo for all modules in app. automatically add when npm package is installed.... other peoples library
+			
+PUBLIC   ------------	assets that will be displayed to user. image files, favicon ..... displays icon in browser tab.  
+				robot.txt which is used for search engine optimization.
+				manifest.json is used to provide meta data to a device when your app is install on it
+				index.html react is injected into this file. 
+
+SRC   ---------------	all the essential files for the funcionality of the app.
+
+	ROOT FILES
+
+.GITIGNORE --------- 	used in version control... which files and folder are not included in react
+	
+README.MD   -------- 	markdown file that gives basic info on app... used to tell users through gitHub what happening
+
+PACKAGE.JSON   ----- 	list info about app. allows npm to run scripts on app
+
+PACKAGE-LOCK.JSON ---	holds list of dependicies. help npm rebuild on another machine. there to insure npm tracks all node modules are present
+
+
+
+
+
+
+==================================================================================================================================================
+
+
+
 
 
 
@@ -58,8 +183,10 @@ cover all the ways that the importing and exporting of JavaScript modules will b
 
 
 	Using default exports  -----  You can have one default export per JavaScript module.
+					when the function == file.name
 
-	Using named exports 
+	Using named exports --------  You can export multiple functions in this manner.
+					when the function != file.name
 
 
 
@@ -204,6 +331,120 @@ import { addTwo } from "./addTwo";			H
 // the rest of the mathOperations.js code goes here	H
 							H
 ========================================================H
+
+
+
+
+
+				=============================
+
+
+
+					FUNCTION TYPES
+				=============================
+
+
+
+FUNCTIONAL COMPONETS:
+			function Welcome() {
+				return <h1>"Hello"</h1>
+			};
+
+-------------------------------------------------------------------
+
+CLASS COMPONENT:
+		
+		class Welcome extends React.Component
+		{
+			render() {
+				return <h1"Hello"</h1>
+			};
+		};
+
+----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+					======================
+
+
+
+						PROPS
+
+
+
+					======================
+
+Used to make code more dynamic. Send the value to pass from the PARENT component as an argument in the form as an HTML attribute .... 
+
+
+			 ~~~	}render(<App title="INFO" />);        <-- hint the method of replacing a key:value pair 
+
+
+.... to the CHILD component. It accepts the value/attribute as an argument ( props ). It accesses the properties of this object with dot notation.
+
+
+			~~~ function App(props) {return <h1>{props.title}</h1>};     <-- the <h1> will display the value from the title property.... INFO
+
+
+Data flows one way... from the parent down to the child!!
+
+SOMETHING ABOUT PURE FUNCTIONS........when declaring a new function.... it must never modify it's own props.
+
+
+
+
+
+
+							PROCESS
+					==========================================
+
+In a simple nut shell, the process of drilling and sending information from parent to child is as follows:  I THINK!!!:
+
+
+
+	Headings.js
+================================================H
+export function Headings(props) {		H	<-- Child <Heading /> does what it wants with the parents INFO
+	return <h1>{props.title}</h1>		H	
+};						H
+================================================H
+
+		App.js
+================================================H
+import { Headings } from "./Headings.js";	H	<-- Parent <App /> give INFO...drills... to the child
+						H
+export function App(){				H
+	return <Headings title= "INFO" />	H
+};						H
+================================================H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
