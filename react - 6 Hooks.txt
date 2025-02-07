@@ -29,6 +29,11 @@ The App component store the state which can be change through events and fucntio
 You also observed that although a stateless component can't directly pass state, 
 it can still trigger actions that will update the state of other components.
 
+Stateful components have both props and state. They're in charge of 
+		client server, communication, processing data 
+and responding to user events. These sorts of logistics should be encapsulated in a moderate number of statefull components.
+
+ all visualization and formatting logic should move downstream into as many stateless components as possible
 
 
 
@@ -226,7 +231,432 @@ There are situations where accessing the DOM directly is needed, and this is whe
 
 
 
+=================================================================================================================================
 
+
+
+															U S E 	      / 	C R E A T E 
+																C O N T E X T 
+
+
+
+					STATE MANAGEMENT
+
+
+
+
+=================================================================================================================================
+
+How to share state through multiple layers of components within more complex apps.
+
+Perform basic states management using the useContext and a useReducer hooks found in context API. 
+
+
+
+API  ---------------	application programming interface. Predefines set of way to interact with code.
+
+CONTEXT API   ------	can be used to  manage state more efficiently across multiple levels of components.
+			makes it able to share props without drilling through children....
+					~~SAVE THE BABIES!!!~~
+
+PROVIDER   ---------	component that STORE the state
+
+CONSUMER   ---------	component that will USE the state
+
+
+
+
+
+					
+
+
+				CREATE/USE CONTEXT
+				------------------
+In a nut shell You save state in a global component named UserContextProvider... The provider wrapps
+the app component so it can basically send its state down as a prop.... i think
+
+
+Import createContext, useContext, useState.  All examples so far show the trio being used in tandem.
+a naming convention similar to useState is used when assigning createContext a name.
+
+	const UserContext = createContext(undefined); <-- undefined when the initial state is unknown
+
+A Provider JSX function is declared under the same naming convention.... UserProvider in this case.
+In the provider function, state is declared with some value.... usually a fetch call, and the return 
+of this function is a JSX component that basically links the UserContext to a provider method. Use of 
+this function is needed elsewhere.... so export this fucker!!!
+
+	~~return <UserContext.Provider value={{ user }}></UserContext.Provider>;
+
+The value is the state data being sent as a prop. * I think *
+
+A custom hook is also exported as a means for other components to CONSUME this context value.
+This external function is created just for convenience, so there's no need to export the user context to external componets.
+
+	export const useUser = () => useContext(UserContext);
+
+Looks like this const IS the prop. Destructure the hook where ever it's consumption is needed.
+
+			const {user} =userUser();
+========================================================================================H	
+					`UserContext.js`				H
+import { createContext, useContext, useState } from 'react';				H
+											H	
+const UserContext = createContext(undefined);						H
+											H
+export const UserProvider = ({ children }) => {						H
+	const [user] = useState({							H	
+		name: 'John',								H
+		email: 'john@example.com',						H
+		dob: '01/01/2000',							H
+	});										H
+	return <UserContext.Provider value={{ user }}></UserContext.Provider>;		H		
+};											H
+											H
+export const useUser =() => useContext(UserContext);					H
+--------------------------------------------------------------------------		H
+				`App.js`						H
+import './App.css';									H
+import { User Provider } from './UserContext';						H
+											H
+const LoggedInUser = () => {								H
+	const {user} = useUser();							H
+	return (									H
+		<p>hello <span className='UserName'>{user.name}</span></p>		H
+	);										H
+}											H
+											H
+const Header = () => {									H
+	return (									H
+		<header>								H
+			<h2>Blog App</h2>						H
+			<LoggedInUser />						H
+		</header>								H		
+	);										H
+}											H
+											H
+const Page = () => {									H
+	const {user} = useUser();							H
+											H
+	return (									H
+		<div>									H
+			<h1>Title</h1>							H
+			<p>Some Longg ASS paragraph.... blahh blahh</p>			H
+			<p>Written by {user.name}</p>					H
+		</div>									H
+	)										H
+}											H
+											H
+function App () {									H	
+	return (									H
+		<div className='App'>							H
+			<Header />							H
+			<Page />							H
+		</div>									H
+	);										H
+}											H
+											H	
+function Root() {									H
+	return (									H
+		<UserProvider>								H
+			<App />								H	
+		</UserProvider>								H
+	);										H
+}											H
+											H
+export default Root;									H
+========================================================================================H
+
+
+
+
+The parent component was saved to a variable and created a component React.createContext.Provider
+
+-	-	-	-	-	-	-	-	-	-	-	-	-
+						MealsProvider.js
+const MealsContext = React.createContext();
+
+const todaysMeals = [ "Foo", "Bar", "Foobar"];
+
+const MealsProvider = ({children}) => {			<-- children is encapsulated {} holds everything that will get wrapped in 
+								MealsProvider component later
+	const [meals, setMealsList] = React.useState(todaysMeals);
+
+	return (
+		<MealsContext.Provider value={{meals}} >		<-- I think .Provider has to be called so
+			{children}						INFO can be passed 
+		</MealsContext.Provider>
+	)
+};
+
+export const useMealsListContext = () => React.useContext(MealsContext);
+
+export default MealsProvider;
+-	-	-	-	-	-	-	-	-	-	-	-	-
+						MealsList.js
+import { useMealsListContext } from '../providers/MealsProvider';
+
+export default const MealsList = () => {
+	
+	const { meals } = useMealsListContext();	<-- originally useMealsListContext.meals['Foo', 'Bar', 'FooBar']
+								destructuring make it easier to access the MEALS
+	return (							Also allows for .map() to be used
+		<div>
+			<h1>Meals List using Context API</h1>
+			{meals.map((meal, index) => (		<-- .map() iterates over the array (meals). It returns the value
+				<h2 key={index}>{meal}</h2>		and the (index)
+			))}
+		</div>
+	);
+}
+-	-	-	-	-	-	-	-	-	-	-	-	-
+						Counter.js
+import { useMealsListContext } from "../providers/MealsProvider";
+
+export default const Counter = () => {
+	
+	const { meals } = useMealsListContext();
+	return (
+		<div>
+			<h3>Number of meals today: {meals.length}</h3>
+		</div>
+	)
+} 
+-	-	-	-	-	-	-	-	-	-	-	-	-
+													memo is important ~~~!!!!~~~
+
+
+
+					React.memo	/	usememo
+				---------------------------------------------
+		============================================================================
+				How re-rendering works with Context
+
+In this reading you will learn about the default behavior of React rendering and when context is used. 
+You will discover how to prevent unnecessary top-level re-renders with React.memo and how object references 
+work in JavaScript. You will also learn how to utilize the useMemo hook to guarantee object references don’t 
+change during re-rendering.
+
+So far, you have learned that when a component consumes some context value and the value of this context changes, that component re-renders.
+
+But what happens with all components in between? Is React wise enough to only re-render the consumers and 
+bypass the intermediary components in the tree? Well, as it turns out, that doesn’t always happen and extra 
+care should be taken when designing your React Context.
+
+When it comes to the default behavior of React rendering, if a component renders, React will recursively 
+re-render all its children regardless of props or context. Let’s illustrate this point with an example that uses some context.
+
+Imagine the following component structure, where the top level component injects a Context provider at the top: 
+
+	App (ContextProvider) > A > B > C
+-	-	-	-	-	-
+	const App = () => {
+	return (
+	   <AppContext.Provider>
+	     <ComponentA />
+	   </AppContext.Provider>
+	 );
+	};
+	
+	const ComponentA = () => <ComponentB />;
+	const ComponentB = () => <ComponentC />;
+	const ComponentC = () => null;
+-	-	-	-	-	-
+
+If the outermost App component re-renders for whatever reason, all ComponentA, ComponentB and ComponentC 
+components will re-render as well, following this order: 
+
+	App (ContextProvider) -> A -> B -> C
+
+If some of your top level components are complex in nature, this could result in some performance hit. 
+To mitigate this issue, you can make use of the top level API React.memo().
+
+If your component renders the same result given the same props, you can wrap it in a call to 
+React.memo for a performance boost by memoizing the result.
+
+Memoization is a programming technique that accelerates performance by caching the return values of expensive function calls.
+
+This means that React will skip rendering the component, and reuse the last rendered result. 
+This is a trivial case for ComponentA, since it doesn’t receive any props.
+
+		const ComponentA = React.memo(() => <ComponentB />);
+
+	---React.memo takes the component definition as a first argument. 
+	---An optional second argument can be included if you would like to specify some custom 
+	logic that defines when the component should re-render based on previous and current props.
+
+After that little adjustment, you will prevent any rendering from happening in all ComponentA, ComponentB and ComponentC if the App component re-renders.
+
+-	-	-	-	-	-	-	-
+	const App = () => {
+	return (
+	   <AppContext.Provider>
+	     <ComponentA />
+	   </AppContext.Provider>
+	 );
+	};
+
+	const ComponentA = React.memo(() => <ComponentB />);
+	const ComponentB = () => <ComponentC />;
+	const ComponentC = () => null;
+-	-	-	-	-	-	-	-
+
+	***A good rule of thumb is to wrap the React component right 
+		after your context provider with React.memo.****
+
+In real-life applications, you will find yourself in need of passing several pieces of data as context value, 
+rather than a single primitive like a string or number, so you’ll be working most likely with JavaScript objects.
+
+Now, according to React context rules, all consumers that are descendants of a provider will 
+re-render whenever the provider’s value prop changes.
+
+Let’s go through the following scenario built upon the previous example, where the 
+context value that gets injected is defined as an object called value with two properties, 
+‘a’ and ‘b’, being both strings. Also, ComponentC is now a consumer of context, so any time 
+the provider value prop changes, ComponentC will re-render.
+
+-	-	-	-	-	-	-	-
+	const App = () => {
+	  const value = {a: 'hi', b: 'bye'};
+	  return (
+	    <AppContext.Provider value={value}>
+	      <ComponentA />
+	    </AppContext.Provider>
+	  );
+	};
+
+	const ComponentA = React.memo(() => <ComponentB />);
+	const ComponentB = () => <ComponentC />;
+	const ComponentC = () => {
+	  const contextValue = useContext(AppContext);
+	  return null;
+	};
+-	-	-	-	-	-	-	-
+
+Imagine that the value prop from the provider changes to {a: ‘hello’, b: ‘bye’}.
+
+If that happens, the sequence of re-renders would be:
+
+	App (ContextProvider) -> C
+
+That’s all fine and expected, but what would happen if the App component re-renders 
+for any other reason and the provider value doesn’t change at all, being still {a: ‘hi’, b: ‘bye’}? 
+
+It may be a surprise to you to find out that the sequence of re-renders is the same as before:
+
+	App (ContextProvider) -> C
+
+Even though the provider value doesn’t seem to change, ComponentC gets re-rendered.
+
+To understand what’s happening, you need to remember that in JavaScript, the below assertion is true:
+
+	***	{a: ‘hi’, b: ‘bye’} !== {a: ‘hi’, b: ‘bye’}	***
+
+That is because object comparison in JavaScript is done by reference. 
+Every time a new re-render happens in the App component, a new instance of the value object is created, 
+resulting in the provider performing a comparison against its previous value and determining that 
+it has changed, hence informing all context consumers that they should re-render.
+
+This problem can be resolved by using the useMemo hook from React as follows. 
+
+
+-	-	-	-	-	-	-	-	-	-
+	const App = () => {
+	  const a = 'hi';
+	  const b = 'bye';
+	  const value = useMemo(() => ({a, b}), [a, b]);
+
+	  return (
+	    <AppContext.Provider value={value}>
+	      <ComponentA />
+	    </AppContext.Provider>
+	  );
+	};
+
+	const ComponentA = React.memo(() => <ComponentB />);
+	const ComponentB = () => <ComponentC />;
+	const ComponentC = () => {
+	  const contextValue = useContext(AppContext);
+	  return null;
+	};
+-	-	-	-	-	-	-	-	-	-
+
+Hooks will be covered in depth in the next module, so don’t worry too much if this is new for you.
+
+For the purpose of this example, it suffices to say that useMemo will memoize the returned value 
+from the function passed as the first argument and will only re-run the computation if any of the 
+values are passed into the array as a second argument change.
+
+With that implementation, if the App re-renders for any other reason that does not change 
+any of ‘a’ or ‘b’ values, the sequence of re-renders will be as such:
+
+	App (ContextProvider)
+
+This is the desired result, avoiding an unnecessary re-render on ComponentC. 
+useMemo guarantees keeping the same object reference for the value variable and since 
+that’s assigned to the provider’s value, it determines that the context has not changed 
+and should not notify any consumer.
+
+
+
+
+
+
+
+
+
+
+
+===================================================================================================================================================================
+
+
+
+
+							useReducer
+
+
+
+
+====================================================================================================================================================================
+
+You can think of it as a SUPER POWERED useState. The useReducer starts with a REDUCER function and includes initial STATE.
+
+
+
+
+
+
+
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+							App.js
+import { useReducer } from 'react';
+
+const reducer = (state, action) => {
+	if (action.type === 'ride') return {money: state.money + 10};	<-- MAYBE... action.type === 'ride' ? {money: state.money + 50} : new Error()
+	if (action.type === 'fuel') return {money: state.money - 50};
+	return new Error();
+}
+
+export default App() {
+
+	const initialState = {money: 100};			<-- THE object literal... ends up... state.money.... THAT HOW TO ACCESS OBJECTS (KEY: VALUE) pairs
+	const [state, dispatch] = useReducer(reducer, initialState);	<-- use dispatch method of reducer hook...accepts object literal
+										with a single prop (type). set to a matching, action.type
+	return (
+	<div>
+		<h1>Wallet: {state.money}</h1>
+		<div>
+			<button onClick={() => dispatch({type: 'ride'})}>
+				A new customer!
+			</button>
+			<button onClick={() => dispatch({type: 'fuel'})}>
+				Refill the tank!
+			</button>
+		</div>
+	</div>
+	)
+}
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
 
 
 
