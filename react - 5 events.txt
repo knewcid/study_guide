@@ -1,0 +1,326 @@
+
+
+
+
+
+
+					Eventful issues
+
+
+
+
+=============================================================================================================================
+
+
+You’re now aware that React can work with most of the same events found in HTML, 
+although React handles them differently.
+
+This means that you may encounter unfamiliar errors when you run your event-driven 
+React code. However, in this reading, you’ll learn about some of the most common 
+errors associated with events and how you can deal with them.
+
+
+
+			Event Errors
+			------------
+
+When you work in any programming environment, language, or framework, 
+you are bound to write code that throws errors, for a variety of reasons.
+
+Sometimes it's just about writing the wrong syntax. Other times it's about 
+not thinking of all the possible scenarios and all the possible ways that 
+things can go wrong in your code.
+
+Regardless of what causes them, errors are a part of everyday life for a developer.
+
+The JavaScript language comes with a built-in error handling syntax, the try...catch syntax.
+
+		try...catch
+
+Let’s examine an example of an error in JavaScript:
+
+
+		(5).toUpperCase()
+
+
+Obviously, you cannot uppercase a number value, and thus, this throws the following error:
+
+
+		Uncaught TypeError: 5.toUpperCase is not a function
+
+
+To handle this TypeError, you can update the code with a try...catch block that 
+instructs the code to continue running after the error is encountered:
+
+-	-	-	-	-	-	-	-	-	-	-
+try {
+    (5).toUpperCase();
+} 
+catch(err) {
+    console.log(`Oops, you can't uppercase a number. 
+        Trying to do it resulted in the following`, err);
+}
+-	-	-	-	-	-	-	-	-	-	-
+
+
+The try-catch block will output some text in the console:
+
+	Oops, you can't uppercase a number. Trying to do 
+	it resulted in the following TypeError: 
+	5.toUpperCase is not a function
+
+
+It is assumed that if you are taking this course that you are already familiar with how the 
+try...catch syntax works, so I won't go into any details after this quick refresher.
+
+Back to React, here's an example of a simple error in a React component:
+
+-	-	-	-	-	-	-	-	-
+function NumBillboard(props) {			<-- props .... the 's'
+    return (
+      <>
+        <h1>{prop.num}</h1>			<-- prop .... no 's'
+      </>
+    )
+  }
+
+export default NumBillboard;
+-	-	-	-	-	-	-	-	-
+
+
+In React, an error in the code, such as the one above, will result in the error 
+overlay showing in the app in the browser.
+
+In this specific example, the error would be:
+
+       ReferenceError
+       prop is not defined
+
+Note: You can click the X button to close the error overlay.
+
+Since event-handling errors occur after the UI has already been rendered, all you have to 
+do is use the error-handling mechanism that already exists in JavaScript – that is, 
+you just use the try...catch blocks.
+
+
+
+
+				EVENT HANDLERS
+
+
+=========================================================================================================================
+
+
+Suppose you use a button to open a menu:
+
+Clicking the button --- Event
+	The event handler --- onClick
+		Opening the menu --- Action
+
+
+
+
+
+				HTML EVENT HANDLING
+				-------------------
+
+	<button id="js-btn" onclick="clickHandler()">Click Me!!</button>
+
+
+It's recommended to use JavaScript for scenarios like these instead.
+
+In the previous example, the HTML element is js-btn, which signals that it's a target element 
+for allowing JavaScript to take control of the HTML structure. 
+
+Second, once you've got an access to an HTML elements with JavaScript, you can then use the built-in 
+add EventListener method on the document object to attach a specific event listener. 
+
+
+
+
+
+				JavaScript Event Handling
+				-------------------------
+
+	const jsBtn = document.getElementById('js-btn')		<-- declare const. assign value from DOM
+	jsBtn.addEventListener('click', function() {			<-- event listener
+		console.log("clicked")
+	})
+
+
+When you apply this method to the previous example, HTML is removed from the equation, 
+but the code on the other hand, is a bit more complicated.
+
+
+
+
+				THE REACT WAY
+				-------------
+Avoid manipulating the DOM as much as possible. Set up declarativley!!! 
+	Describe update to react, and let it figure out the rest.
+
+
+		NO FUNCTION INVOCATION IN REACT!!!!!!!
+			leave out the ()
+
+
+	<button onClick={clickHandler}>Click Me</button>
+
+
+
+
+
+
+
+
+You can use clickHandler to set up how a button responds to a click. 
+This is done by defining the clickHandler, setting it as a function, and assigning an arrow function to it.
+
+
+EXAMPLE:
+		App.js
+-	-	-	-	-	-	-	
+import Btn from './btn';
+import App from './App';
+
+function App() {
+	return (
+		<Btn />
+	)
+};
+--------------------------------------------------------
+		Btn.js
+-	-	-	-	-	-	-	-
+export function Btn () {
+	const clickHandeler = 					<-- the argument to happen
+		() => console.log("clicked");
+	return (
+		 <button onClick={clickHandeler}	<-- defines an event... onClick. For each click the argument happens.
+			Click Me				
+		</button>
+	);
+};
+--------------------------------------------------------
+	alternatively Btn.js
+-	-	-	-	-	-	-	-		
+export function Btn () {
+	const clickHandeler = 
+		() => console.log("mouse over");
+	return (
+		 <button onMouseOver={clickHandeler}	<-- defines an event when the mouse hovers over the element
+			Click Me
+		</button>
+	);
+};
+--------------------------------------------------------
+
+
+
+
+					 function declarations as props
+					-------------------------------
+
+
+import Counter from './counter';
+
+function App (props){
+	return (
+		<Counter onClick={clickHandler} />
+	)
+}
+-	-	-	-	-	-	-	-
+
+export default function Counter (props) {
+	const clickHandler = 
+	() => console.log("clicked")
+
+	<button props.onClick>Click Me!!</button>
+}
+------------------------------------------------------------------
+
+
+
+		Handling events using inline anonymous ES5 functions
+		----------------------------------------------------
+
+Although it's possible to write your click handlers using this syntax, 
+it's not a common approach and you will not find such code very often in React apps.
+
+
+	<button onClick={function() {console.log('first example')}}>
+	    An inline anonymous ES5 function event handler
+	</button>
+-	-	-	-	-	-	-	-	-	-	
+
+
+
+
+
+		Handling events using inline anonymous ES6 functions (arrow functions)
+		-----------------------------------------------------------------------
+
+
+This approach is much more common then the previous one. If you want to keep all your logic 
+inside the JSX expression assigned to the onClick attribute, use this syntax.
+
+
+	<button onClick={() => console.log('second example')}>
+	    An inline anonymous ES6 function event handler
+	</button>
+-	-	-	-	-	-	-	-	-	-	
+
+
+
+
+			Handling events using separate function declarations
+			-----------------------------------------------------
+
+
+This syntax makes sense to be used when your onClick logic is too complex to easily fit into an 
+anonymous function. While this example is not really showing this scenario, imagine a function that has, 
+for example, 20 lines of code, and that needs to be ran when the click event is triggered. 
+This is a perfect use-case for a separate function declaration.
+
+
+
+	function App() {
+	    function thirdExample() {
+	        console.log('third example');
+	    };
+	    return (
+	        <div className="thirdExample">
+	            <button onClick={thirdExample}>
+	                using a separate function declaration
+	            </button>
+	        </div>
+	    );
+	};
+	export default App;
+
+
+
+
+			Handling events using separate function expressions
+			----------------------------------------------------
+	***Tip: A way to determine if a function is defined as an expression or a declaration is: 
+	if it does not start the line with the keyword function, then it’s an expression.
+
+
+The syntax in this example is very common in React. It uses arrow functions, but also allows 
+us to handle situations where our separate function expression spans multiple lines of code.
+
+
+	function App() {
+	    const fourthExample = () => console.log('fourth example');
+	
+	    return (
+	        <div className="fourthExample">
+	            <button onClick={fourthExample}>
+	                using a separate function expression
+	            </button>
+	        </div>
+	  );
+	};
+	export default App;
+
+

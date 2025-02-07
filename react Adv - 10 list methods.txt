@@ -1,0 +1,110 @@
+
+
+
+							List &
+						methods for navigating
+						----------------------	
+
+
+
+
+=====================================================================================================================================================
+
+
+
+						ARRAY METHODS
+						=-=-=-=-=-=-=	
+
+.filter()   -----------	 will return a new list with just the elements that fulfil the condition
+			if the iteration resolves true, keep it...... and false, filter it out
+				const newArr = props.data.filter((arr) => {return (list.calories < 500)})
+
+.sort()   -------------	sorts the elements of an array based on a comparison function provided	
+			value > 0===sort ba; value < 0===sort ab; value === 0 sort original order.
+				const newArr = props.data.sort((arg1, arg2) => {return arg1.calories - arg2.calories})
+
+.map()   --------------	creates a new array after doin some function action on calling array
+			const array1 = [1, 4, 9, 16]; const map1 = array1.map((x) => x * 2)
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+================================================================H
+								H
+import "./App.css";						H
+import DessertsList from "./DessertsList";			H
+								H	
+const desserts = [						H
+  {								H
+    name: "Chocolate Cake",					H
+    calories: 400,						H
+    createdAt: "2022-09-01",					H
+  },								H
+  {								H
+    name: "Ice Cream",						H
+    calories: 200,						H
+    createdAt: "2022-01-02",					H
+  },								H								
+  {								H
+    name: "Tiramisu",						H
+    calories: 300,						H
+    createdAt: "2021-10-03",					H
+  },								H
+  {								H
+    name: "Cheesecake",						H		
+    calories: 600,						H
+    createdAt: "2022-01-04",					H
+  },								H
+];								H
+								H
+function App() {						H
+  return (							H
+    <div className="App">					H
+      <h2>List of low calorie desserts:</h2>			H
+      <DessertsList data={desserts} />				H
+    </div>							H
+  );								H
+}								H
+								H
+export default App;						H
+								H	
+----------------------------------------------------------------H			
+								H
+function DessertsList(props) {					H
+  const filter = props.data.filter((e) => {			H	
+    return e.calories < 500					H
+  }).sort((a, b) => {						H
+    return a.calories - b.calories				H
+  }).map((foods) => {						H
+    return (							H
+      <li>{foods.name} - {foods.calories} cals.</li>		H	
+    )								H
+  })								H
+    return (							H
+     <div>							H
+      <ul>							H
+        {filter}        					H
+      </ul>							H	
+     </div>  							H	
+    )								H
+}								H
+								H
+export default DessertsList;					H	
+================================================================H

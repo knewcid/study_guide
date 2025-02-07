@@ -40,6 +40,12 @@ JS object ------------	used to store data.... with named value: pairs. access pr
 
 pure functions  ------	always return the same ouput for the same argument values
 
+bundling   -----------	When the browser requests the application, return and load all necessary HTML, CSS and JavaScript immediately.
+
+lazy loading or code splitting
+	When the browser requests the application, return only the minimum HTML, CSS and JavaScript needed to 
+	load the application. Additional resources are downloaded as required by the application, for example, 
+	when a user navigates to a specific section of the application.
 
 
 
@@ -430,20 +436,180 @@ export function App(){				H
 
 
 
+				PROPS.CHILDREN
+			------------------------------
+
+Props.children is a special prop which is automatically passed to every component. 
+Take into account a bag that hold apples and pears....
+
+-	-	-	-	-	-	-	-	-	-	-
+export function Apples (props) {
+	return (
+		<div className="promo-section">
+			<div>
+				<h2> These apples are: {props.color}</h2>
+			</div>
+			<div>
+				<h3>There are {props.number} apples.</h3>
+			</div>
+		</div>
+	)
+}
+
+-	-	-	-	-	-	-	-	-	-	-	
+
+export funciton Pears(props) {
+	return (
+		<h2>I don't like pears, but my friend, {props.friend}, does!</h2>
+	)
+}
+
+-	-	-	-	-	-	-	-	-	-	-	
+
+export Bag function(props) {
+	const bag = {				<-- style object literal  CANNOT USE THE ( - )... use camelCase instead.
+		padding: "20px",			it is JS for a CSS expression.... 
+		border: "1px solid gray",
+		background: "#fff",
+		margin: "20px 0"
+	}
+	return (
+		<div style={bag}>		<-- inline styling {JS for a CSS exression} 
+			{props.children}		<-- I THINK.... since nothing specific is mentioned yet.... Bag is just passing 
+		</div>						INFO down... drilling.... something to do with the way the props object would 
+	)							acces the data... props.UNKNOWN KEY.INFO!! 
+}								~ i wonder if the pear could access data handed to the apple ~
+
+-	-	-	-	-	-	-	-	-	-	-	
+
+import {Apples, Pears, Bag} from
+
+	function App() {
+	return (
+		<Bag>
+			<Apples color="yellow" number="5" />
+			<Pears friend="Peter" />
+		</Bag>
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================================================================
+	
+
+
+
+			Prop drilling
+			-------------
+
+
+=========================================================================================================================================================================
+
+	Please note that the goal here is not to build an app that would exist in the real world. 
+	The goal of this app is to examine the practice of prop drilling, 
+	so that you can focus on it and understand it in isolation.
+
+
+						DON'T ATTEMPT THIS AT HOME!!!!
+
+function Main(props) { 
+  return <Header msg={props.msg} />; 
+};
+
+function Header(props) { 
+  return ( 
+    <div style={{ border: "10px solid whitesmoke" }}> 
+      <h1>Header here</h1> 
+      <Wrapper msg={props.msg} /> 
+    </div> 
+  ); 
+};
+
+function Wrapper(props) { 
+  return ( 
+    <div style={{ border: "10px solid lightgray" }}> 
+      <h2>Wrapper here</h2> 
+      <Button msg={props.msg} /> 
+    </div> 
+  ); 
+};
+
+function Button(props) { 
+  return ( 
+    <div style={{ border: "20px solid orange" }}> 
+      <h3>This is the Button component</h3> 
+      <button onClick={() => alert(props.msg)}>Click me!</button> 
+    </div> 
+  ); 
+};
+
+function App() { 
+  return ( 
+    <Main  
+      msg="I passed through the Header and the Wrapper and I reached the Button component"  
+    /> 
+  ); 
+}; 
+
+export default App;
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+
+				OUTPUT
+				------
+
+H===============================================H
+H	HEADER HERE				H
+H						H
+HW---------------------------------------------WH
+HW	WRAPPER HERE			       WH
+HW					       WH
+HWB~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~BWH
+HWB	BUTTON HERE			      BWH	__________________________
+HWB					      BWH	| I passed throught the   |	
+HWB					      BWH	| Header and the Wrapper  |	
+HWB   ------------			      BWH	| and I reached the       |
+HWB   | CLICK ME |	<---------------------BWH-------| Button component        |
+HWB   ------------    			      BWH       |_________________________|
+HWB~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~BWH
+HW---------------------------------------------WH
+H===============================================H
 
 
 
 
 
 
+This app is simple enough that you should be able to understand it on your own. 
+Let’s address the main points to highlight what is happening in the code above.
 
+The top-most component of this app is the App component. 
+The App component returns the Main component. 
+The Main component accepts a single attribute, named msg, as in “message”.
 
+At the very top of the app, the Main function declares how the Main component should behave. 
+The Main component is responsible for rendering the Header component. 
 
+	-Note that when the Header component is rendered from inside Main, it also receives the msg prop.
 
+The Header component’s function declaration renders an h1 that reads “Header here”, 
+then another component named Wrapper. 
 
+	-Note that the naming here is irrelevant – the components Header and 
+	Wrapper are named to make it a bit more like it might appear in a real app 
+	but ultimately, the focus is on having multiple components, rather than 
+	describing specific component names properly.
 
+So, the Header component’s function declaration has a return statement, 
+which renders the Wrapper component with the msg prop passed to it.
 
+In the Wrapper component’s function declaration, there’s an h2 that reads 
+“Wrapper here”, in addition to the rendering of the Button component, 
+which also receives the msg attribute.
 
+Finally, the Button component’s function declaration is coded to receive 
+the props object, then inside of the wrapping div, show an h3. 
+The h3 reads “This is the Button component”, and then, under that, 
+there’s a button element with an onClick event-handling attribute. 
+This is passed to an arrow function which should alert the string 
+that comes from the props.msg prop.
 
 
 

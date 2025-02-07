@@ -1,0 +1,136 @@
+
+
+
+
+
+
+						React Router
+
+
+
+
+
+
+
+
+=================================================================================================================================
+
+
+React Router -	a library that gives you more control over the routing of components
+
+bundling -----	When the browser requests the application, return and load all necessary HTML, CSS and JavaScript immediately.
+
+lazy loading or code splitting
+	When the browser requests the application, return only the minimum HTML, CSS and 
+	JavaScript needed to load the application. Additional resources are downloaded as 
+	required by the application, for example, when a user navigates to a specific section of the application.
+
+
+
+				Anchor Tag Elements in Single-Page Elements
+				-------------------------------------------
+A single-page application can’t have regular anchor tag elements as a traditional web app can.
+The reason for this is that the default behavior of an anchor tag is to load another HTML file 
+from a server and refresh the page. This page refresh is not possible in a SPA that's powered 
+by a library such as React because a total page refresh is not the way that a SPA works, as 
+explained earlier in this lesson item. 
+
+Instead, a SPA comes with its own special implementation of anchor tags and links, which only 
+give an illusion of loading different pages to the end user when in fact, they simply load 
+different components into a single element of the real DOM into which the virtual DOM tree 
+gets mounted and updated.
+
+That's why navigation in a single-page app is fundamentally different from its counterpart 
+in a multi-page app. Understanding the concepts outlined in this lesson item will make you 
+a more well-rounded React developer.
+
+
+
+
+
+
+					HOW TO
+					------
+
+
+	===============================================================
+The steps seem straight forward to. Inside the terminal of your project:
+	
+		npm i react-router-dom@6
+
+
+	BrowserRouter   ------	Root level import. Wrapp the <App />
+
+	Link   ---------------	App level import. Requires (to) attribute. Links to the route path,
+
+	Routes   -------------	App level import. Wrapp the <Route />
+
+	Route   --------------	App level import. Requires (path, <element />) attribute. 
+
+
+
+
+
+
+
+
+
+
+-	-	-	-	-	-	-	-	-	-	-	-	-
+						index.js
+import ReactDom from 'react-dom/client';
+import './index.css';
+import App from './App';
+import { BrowserRouter } from 'react-router-dom';		<---- IMPORT B.router
+
+const root = ReactDom.createRoot(document.getElementById('root'));
+
+root.render(
+	<BrowserRouter>	
+		<App />			<--- give the App a blanket
+	</BrowserRouter>
+);
+-	-	-	-	-	-	-	-	-	-	-	-	-
+---------------------------------------------------------------------------------------------------------
+						App.js
+import Homepage from './Homepage'
+import AboutMe from './AboutMe'
+import {Routes, Route, Link} from 'react-router-dom';
+
+export default function App() {
+	return (
+		<div className='App'>
+			<nav className='nav'>
+				<Link to="/" className='nav-item'>Homepage</Link>
+				<Link to='/about-me' className='nav-item'>About Me</Link>
+			</nav>
+			<Routes>
+				<Route path='/' element={<Homepage />} />
+				<Route path='/about-me' element={<AboutMe />} />
+			</Routes>
+		</div>
+	)
+};
+-	-	-	-	-	-	-	-	-	-	-	-	-	-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
