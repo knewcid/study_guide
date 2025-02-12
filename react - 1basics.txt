@@ -18,6 +18,7 @@ React treats capitalized names differently. Components MUST be capitalized.... e
 	React will treat lower case components as HTML elements!!
 
 
+React Fragment  ------	 component lets you group a list of children without adding extra nodes to the DOM.
 
 COMPONENT   ----------   stand alone part of the UI. Combine into more complex unit to form the website.
 
@@ -38,7 +39,7 @@ props ----------------	represents values passed as arguments as in functional pr
 
 JS object ------------	used to store data.... with named value: pairs. access properties with dot notation.
 
-pure functions  ------	always return the same ouput for the same argument values
+pure functions  ------	always return the same ouput for the same argument values... NO SIDE EFFECTS
 
 bundling   -----------	When the browser requests the application, return and load all necessary HTML, CSS and JavaScript immediately.
 
@@ -46,6 +47,15 @@ lazy loading or code splitting
 	When the browser requests the application, return only the minimum HTML, CSS and JavaScript needed to 
 	load the application. Additional resources are downloaded as required by the application, for example, 
 	when a user navigates to a specific section of the application.
+
+array destructuring   --   a way to get individual items from an array of items and save those individual items as separate components
+			-  let veggies = [parsley, onion, carrot]; const [v1, v2, v3] = veggies
+				v1 = parsley; v2 = onion; v3 = carrot;
+
+
+object destructuring  ------	 have to destructure a property of an object using that exact properties name 
+				as the name of the destructured variable.
+
 
 
 

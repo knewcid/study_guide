@@ -10,6 +10,13 @@
 =========================================================================================================================================
 
 Hooks are functions introduced into React V-16.8, that allow you to hook into React state and lifestyle features of components.
+		---You should only call hooks from the React component!!
+		---Hooks should be at the top level of script
+			before a return statement, outside of loops, conditions or nested functions
+		---are able to call myltiple state or effect hooks
+		---Make multiple callins, in the same sequence
+			it was wierd... she didnt explain too well.. call you hooks right
+
 
 
 
@@ -39,7 +46,12 @@ and responding to user events. These sorts of logistics should be encapsulated i
 
 
 						USESTATE
-					==========================
+					==========================									==========================useState
+
+While it's possible to use any kind of a data structure when working with useState, 
+	it's better to use it with primitive data types, such as strings, numbers, or booleans.
+		The useReducer hook is best used on more complex data, specifically, arrays or objects
+One negative characteristic of useState is that it often gets hard to maintain as the state gets more complex.
 
 This hook is used to manage the state within a component and keep track of it and it's built directly into React.
 So it's functionality is a library that must be imported for use. Similar to how you import that DOM-client,.....
@@ -194,6 +206,74 @@ export default function RegisterForm() { 										H
 --------------------------------------------------------								H
 ========================================================================================================================H
 
+				The correct way to update the state object in React when using useState
+				---------------------------------------------------------------------------------------------------===============================
+The suggested approach for updating the state object in React when using useState is to copy the state object and then update the copy.
+
+This usually involves using the spread operator (...).
+
+Keeping this in mind, here's the updated code:
+
+import { useState } from "react"; 
+ 
+		export default function App() { 
+		  const [greeting, setGreeting] = useState({ greet: "Hello, World" }); 
+		  console.log(greeting, setGreeting); 
+ 
+		  function updateGreeting() { 
+		    const newGreeting = {...greeting}; 
+		    newGreeting.greet = "Hello, World-Wide Web"; 
+		    setGreeting(newGreeting); 
+		  } 
+ 
+		  return ( 
+		    <div> 
+		      <h1>{greeting.greet}</h1> 
+		      <button onClick={updateGreeting}>Update greeting</button> 
+		    </div> 
+		  ); 
+		} 
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+								with an arrow function ()=>{}
+		import { useState } from "react"; 
+ 
+		export default function App() { 
+		  const [greeting, setGreeting] = useState( 
+		    { 
+		        greet: "Hello", 
+		        place: "World" 
+		    } 
+		  ); 
+		  console.log(greeting, setGreeting); 
+ 
+		  function updateGreeting() { 
+		    setGreeting(prevState => { 
+		        return {...prevState, place: "World-Wide Web"} 
+		    }); 
+ 		 } 
+ 
+		  return ( 
+		    <div> 
+		      <h1>{greeting.greet}, {greeting.place}</h1> 
+		      <button onClick={updateGreeting}>Update greeting</button> 
+		    </div> 
+		  ); 
+		} 
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	
+The reason this works is because it uses the previous state, which is named prevState, 
+and this is the previous value of the greeting variable. In other words, it makes a 
+copy of the prevState object, and updates only the place property on the copied object. 
+It then returns a brand-new object: 
+
+
+		return {...prevState, place: "World-Wide Web"} 
+
+
+Everything is wrapped in curly braces so that this new object is built correctly, 
+and it is returned from the call to setGreeting.
+
+=====================================================================================================================================================================================
+
 
 
 
@@ -206,17 +286,22 @@ export default function RegisterForm() { 										H
 
 		We use the useRef hook to access a child element directly.
 
-When you invoke the useRef hook, it will return a ref object. The ref object has a property named current.
+When you invoke the useRef hook, 
+	it will return a ref object. 
+		The ref object has a property named current.
+
+
+
 
 -	-	-	-	-	-	-	-	-
 function TextInputWithFocusButton() {
   const inputEl = useRef(null);
   const onButtonClick = () => {
-    inputEl.current.focus();		<-- `current` points to the mounted text input element
+    inputEl.current.focus();		<-- `current` points to the mounted text input element... This object is the return value of invoking the useRef hook
   };
   return (
     <>
-      <input ref={inputEl} type="text" />
+      <input ref={inputEl} type="text" />		<-- React will create the input elements DOM node and render it on the screen.
       <button onClick={onButtonClick}>Focus the input</button>
     </>
   );
@@ -270,7 +355,7 @@ CONSUMER   ---------	component that will USE the state
 					
 
 
-				CREATE/USE CONTEXT
+				CREATE/USE CONTEXT							==========================C O N T E X T ==========
 				------------------
 In a nut shell You save state in a global component named UserContextProvider... The provider wrapps
 the app component so it can basically send its state down as a prop.... i think
@@ -429,7 +514,7 @@ export default const Counter = () => {
 
 					React.memo	/	usememo
 				---------------------------------------------
-		============================================================================
+		============================================================================				==============================================< M E M O >========
 				How re-rendering works with Context
 
 In this reading you will learn about the default behavior of React rendering and when context is used. 
@@ -619,10 +704,16 @@ and should not notify any consumer.
 
 ====================================================================================================================================================================
 
-You can think of it as a SUPER POWERED useState. The useReducer starts with a REDUCER function and includes initial STATE.
+You can think of it as a SUPER POWERED useState. The useReducer starts with initial STATE and includes a REDUCER function.
+This is beneficial because the reducer functions second argument is the action object.
+This object has multiple type values, and based on each of these types values, you can 
+invoke the dispatch function to perform a specific operation.
 
 
-
+The reducer function takes in the previous state and an action and returns the new state.
+The action type determines the specific action of the reducer. Actions can have any form. By convention, 
+it's common to pass objects with a type property identifying the action. You should include the 
+minimal necessary information that the reducer needs to compute the next state.
 
 
 
@@ -633,7 +724,7 @@ import { useReducer } from 'react';
 
 const reducer = (state, action) => {
 	if (action.type === 'ride') return {money: state.money + 10};	<-- MAYBE... action.type === 'ride' ? {money: state.money + 50} : new Error()
-	if (action.type === 'fuel') return {money: state.money - 50};
+	if (action.type === 'fuel') return {money: state.money - 50};		REDUCER IS SORRTA LIKE CLICKHANDLER function
 	return new Error();
 }
 
@@ -663,6 +754,325 @@ export default App() {
 
 
 
+========================================================================================================================================\
+                                                                                                                                         \	              useEffect( ()=> {
+                                                                                                                                          \       		 if (data !== '') {
+                                                                                                       useEffect                           }>--x	   	    setData('test data')
+                                                                                                                                          /     \		 };
+                                                                                                                                         /       \_________   })
+========================================================================================================================================/         
+
+
+
+side effect   ------------- a side effect can be thought of as something external to or outside of a function. 
+				it will do things such as 
+							Updating a Browser tab,
+							invoke console log, 
+							invoke fetch or 
+							invoke browsers geolocation functionality.
+								^^^those commands 
+									---will perform or display something different
+										depending on the syntax location in the string of code 
+									---are methods of the DOM, which exist outside of your code....React.
+										 browser application programming interface or BROWSER API
+
+
+So how should you deal with the issue of impure functions in react. 
+Well, it's all about containing the impure actions inside their own special areas. 
+To do this and react you need 
+			      to 
+				 use 
+				     the 
+					 useEffect hook.
+First, you need to import the use Effect hook from react. 
+	The useEffect hook works by accepting two parameters. 
+							----The first is a callback function. 
+useEffect(()=>{console.log(total)},[]);			----The second parameter is an array. 
+							  ^-This array can be kept empty which is 
+							    perfectly valid, while the syntax is valid. 
+It's common to use an arrow function as the first argument of the invocation of the use Effect hook. 
+	Note that the use Effect has been simplified to a single line of code. 
+
+		
+
+
+You have been introduced to the primary usage of the useEffect hook, a built-in React hook 
+best suited to perform side effects in your React components.
+
+		---dependency array 
+		---different useEffect calls that can be used to separate different concerns. 
+		---clean up resources and free up memory in your useEffect logic by returning a function.
+
+The code you place inside the useEffect hook always runs after your component mounts 
+or, in other words, after React has updated the DOM. In addition, depending on your 
+configuration via the dependencies array, your effects can also run when certain 
+state variables or props change. 
+
+		***By default, 
+		    ***if no second argument 
+			***is provided to the useEffect function, 
+
+		the effect will run after every render.
+============================================================================
+useEffect(() => { 
+   document.title = 'Little Lemon';
+ }); 
+-	-	-	-	-	-	-	-	-	-	-
+
+However, that may cause performance issues, especially if your side effects are computationally intensive. 
+A way to instruct React to skip applying an effect is passing an array as a second parameter to useEffect.
+In the below example, the integer variable version is passed as the second parameter. 
+That means that the effect will only be re-run if the version number changes between renders.
+
+		useEffect(() => { 
+		  document.title = `Little Lemon, v${version}`;
+		}, [version]); 		<----------------- Only re-run the effect if version changes 
+
+
+If version is 2 and the component re-renders and version still equals 2, 
+React will compare [2] from the previous render and [2] from the next render. 
+Since all items inside the array are the same, React would skip running the effect.
+
+================================================		Use multiple Effects to Separate Concerns		============================================
+
+React doesn’t limit you in the number of effects your component can have. 
+In fact, it encourages you to group related logic together in the same 
+effect and break up unrelated logic into different effects.
+
+
+		function MenuPage(props) { 
+		  const [data, setData] = useState([]); 
+
+		  useEffect(() => { 
+		    document.title = 'Little Lemon'; 
+		  }, []); 
+
+		  useEffect(() => { 
+		    fetch(`https://littlelemon/menu/${id}`) 
+		      .then(response => response.json()) 
+
+
+
+Multiple hooks allow you to split the code based on what it is doing, improving code readability and modularity.
+
+
+				Effects with Cleanup
+				---------------------
+Some side effects may need to clean up resources or memory that is not required anymore, 
+avoiding any memory leaks that could slow down your applications. For example, you may 
+want to set up a subscription to an external data source. In that scenario, it is vital 
+to perform a cleanup after the effect finishes its execution.
+
+How can you achieve that? In line with the previous point of splitting the code based 
+on what it is doing, the useEffect hook has been designed to keep the code for 
+adding and removing a subscription together, since it’s tightly related. 
+
+	If your effect returns a function, 
+		React will run it when it’s time to clean up resources 
+			and free unused memory.
+
+
+		function LittleLemonChat(props) { 
+		  const [status, chatStatus] = useState('offline'); 
+
+		  useEffect(() => { 
+		    LemonChat.subscribeToMessages(props.chatId, () => setStatus('online')) 
+
+		    return () => { 
+		      setStatus('offline'); 
+		      LemonChat.unsubscribeFromMessages(props.chatId); 
+		    }; 
+
+
+
+Returning a function is optional and it’s the mechanism React provides 
+in case you need to perform additional cleanup in your components.
+React will make sure to run the cleanup logic when it’s needed. 
+The execution will always happen when the component unmounts. 
+
+However, in effects that run after every render and not just once, 
+	 React will also clean up the effect from the previous render 
+	 before running the new effect next time.
+
+			Conclusion
+In this lesson, you learned some practical tips for using the built-in Effect hook. 
+In particular, you were presented with how to use the dependency array properly, 
+how to separate different concerns in different effects, 
+and finally how to clean up unused resources 
+by returning an optional function inside the effect.
+
+
+import React from 'react';
+import './App';
+
+export default function App {
+	const [toggle, setToggle] = React.useState(false);
+
+	const clickHandler() {											_____=dependency array determines when the useEffect hook will be invoked
+		setToggle(!toggle);										//		if left empty, then useEffect runs at startup... and never again.
+	}													|                		 NOTHING === NOTHING
+														v		         if nothing changes, nothing happens
+	React.useEffect(()=>{document.title = toggle ? "Welcome to Little Lemon" : "Using the useEffect hook", [ ] });
+														^__	
+	return(													   \---if toggle is passed in as the 2nd argument... whenever the 
+		<div>													state of toggle changes, then the useEffect will trigger!!!
+		   <h1>Using the Effect Hook</h1>									  
+		   <button onClick={clickHandler}>
+			Toggle Message
+		   </button>
+		   {toggle && <h2>Welcome to Little Lemon</h2>}
+		</div>
+	)
+}
+-	-	-	-	-	-	-	-	-	-	-
+
+
+
+
+
+===========================================================================================================================================================================
+
+
+
+
+
+
+								C U S T O M 
+									H O O K S
+
+
+
+
+
+==================================================================================================================================================================================
+
+
+React has some built-in hooks, such as the useState hook, or the useRef hook, which you learned about earlier. 
+However, as a React developer, you can write your own hooks. So, why would you want to write a custom hook?
+
+In essence, hooks give you a repeatable, streamlined way to deal with specific requirements in your React apps. 
+For example, the useState hook gives us a reliable way to deal with state updates in React components.
+
+A custom hook is simply a way to extract a piece of functionality that you can use again and again. 
+Put differently, you can code a custom hook when you want to avoid duplication or when you do not want 
+to build a piece of functionality from scratch across multiple React projects. By coding a custom hook, 
+you can create a reliable and streamlined way to reuse a piece of functionality in your React apps.
+
+To understand how this works, let's explore how to build a custom hook. To put this in context, let's also code a very simple React app.
+
+
+-	-	-	-	-	-	-	-	-	-	-	-	
+					App.js
+
+	import { useState } from "react"; 
+ 
+	function App() { 
+	  const [count, setCount] = useState(0); 
+ 
+	  function increment() { 
+	    setCount(prevCount => prevCount + 1) 
+	  } 
+ 
+	  return ( 
+	<div> 
+	      <h1>Count: {count}</h1> 
+	      <button onClick={increment}>Plus 1</button> 
+	    </div> 
+	  ); 
+	} 
+ 
+	export default App; 
+-	-	-	-	-	-	--	-	-	-	-=	-	-
+
+
+This is a simple app with an h1 heading that shows the 
+						value of the count state variable 	
+									and a button 
+with an onClick event-handling attribute which, when triggered, invokes the increment() function.
+
+The hook will be simple too. It will console log a variable's value whenever it gets updated.
+
+Remember that the proper way to handle console.log() invocations is to use the useEffect hook.
+
+So, this means that my custom hook will:
+
+		---Need to use the useEffect hook and 
+		---Be a separate file that you'll then use in the App component. 
+
+
+			How to name a custom hook
+			--------------------------
+A custom hook needs to have a name that begins with USE.
+Because the hook in this example will be used to log values to the console, 
+let’s name the hook 
+			useConsoleLog.
+
+
+				Coding a custom hook
+				---------------------
+Now's the time to explore how to code the custom hook.
+
+First, you’ll add it as a separate file, which you can name useConsoleLog.js, 
+and add it to the root of the src folder, in the same place where the App.js component is located.
+
+
+-	-	-	-	-	-	-	-	-	-	-	-	-	
+						useConsoleLog.js
+	import { useEffect } from "react";
+	
+	function useConsoleLog(varName) {
+	  useEffect(() => {
+	    console.log(varName);
+	  }, [varName]);
+	}
+
+	export default useConsoleLog;
+-	-	-	-	-	-	-	-	-	-	-	-	-	-	
+
+
+				Using a custom hook
+				--------------------
+Now that the custom hook has been coded, you can use it in any component in your app.
+Since the app in the example only has a single component, named App, you can use it to update this component.
+
+The useConsoleLog hook can be imported as follows:
+
+		import useConsoleLog from "./useConsoleLog";
+
+And then, to use it, under the state-setting code, I'll just add the following line of code:
+
+		useConsoleLog(count);
+
+
+	completed code  
+-	-	-	-	-	-		-	-	-
+					App.js 
+
+
+	import { useState } from "react";
+	import useConsoleLog from "./useConsoleLog";
+
+	function App() {
+	  const [count, setCount] = useState(0);
+	  useConsoleLog(count);
+
+	  function increment() {
+	    setCount(prevCount => prevCount + 1);
+	  }
+	return (
+	    <div>
+	      <h1>Count: {count}</h1>
+	      <button onClick={increment}>Plus 1</button>
+	    </div>
+	  );
+	}
+
+	export default App;
+-	-	-	-	-	-	-	-	-	-	-	
+
+
+This update confirms the statement made at the beginning of this reading, which is that custom hooks 
+are a way to extract functionality that can then be reused throughout your React apps
 
 
 
