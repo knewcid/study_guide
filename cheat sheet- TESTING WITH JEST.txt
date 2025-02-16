@@ -94,6 +94,70 @@ YOU MUST ALSO EXPORT THE FUNCTIONS FROM ROOT FOLDER ALSO!!!!
 
 	module.exports = <function name>
 
+===============================================================================================================================
+
+
+
+
+
+
+				BEST PRACTICES
+
+
+
+===============================================================================================
+
+
+
+
+Avoid including implementation details	
+	. React is just a tool, and your final users will have no notion that React exists at all.
+
+
+work with DOM nodes
+	Rather than dealing with instances of rendered React components, your tests should work with actual DOM nodes. 
+
+
+Resemble software useage
+	The more you test resemble the way your software is used, the more confidence they can give you.
+
+
+Maintainability
+	 Finally, you also want your tests to be maintainable in the long term. 
+
+
+
+As long as you're not changing functionality, any changes in the implementation of the 
+component won't break your tests and slow you and your team down.
+
+Now, let's explore the two tools that React endorses to structure your tests, 
+Jest and the React Testing Library. 
+
+
+Jest ---  Jest is a JavaScript test runner that lets you access an artificial DOM 
+	  called JSDOM. While JSDOM is only an approximation of how the browser works, 
+	  it is often good enough for testing React components.
+
+
+
+Jest provides a good iteration speed combined 
+				with powerful features like 
+						mocking modules, 
+				so you can have more control over how the code executes.
+
+Recall that mocking refers to something made as an imitation, 
+and enables you to replace complex functions from your code 
+with others that are simpler and simulate the same behavior. 
+Mocking features can be used to make sure that your unit testing is standalone. 
+
+
+
+
+
+
+
+
+
 
 
 
