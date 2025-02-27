@@ -89,6 +89,8 @@ You can use any name you’d like, but it’s always good to have a name that is
 
 
 
+	*** npm install	***	will install all missing dependacies for a project, 
+
 
 
 
